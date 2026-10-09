@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#151a35" />
+    <meta
+      name="description"
+      content="龙没有耳朵：一个可以保存网址和文字的轻量级静态网页。"
+    />
+    <title>龙没有耳朵 · 网址文字收集器</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="topbar">
+        <a class="brand" href="./" aria-label="龙没有耳朵首页">
+          <span class="brand-mark" aria-hidden="true">🐉</span>
+          <span>
+            <strong>龙没有耳朵</strong>
+            <small>网址文字收集器</small>
+          </span>
+        </a>
+        <div class="topbar-actions">
+          <span class="save-status" id="saveStatus">本地自动保存</span>
+          <button class="button button-ghost" id="loadExample" type="button">
+            加载示例
+          </button>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero">
+          <div class="hero-copy">
+            <p class="eyebrow">YOUR LINKS · YOUR WAY</p>
+            <h1>把重要网址，<span>收进一条龙。</span></h1>
+            <p class="hero-description">
+              添加网址和显示文字，随时打开、复制或停用。内容保存在当前浏览器中，适合放到 GitHub Pages 私人使用。
+            </p>
+          </div>
+          <div class="hero-orb" aria-hidden="true">
+            <span>龙</span>
+          </div>
+        </section>
+
+        <section class="workspace" aria-label="网址管理工作区">
+          <div class="panel editor-panel">
+            <div class="panel-heading">
+              <div>
+                <p class="section-kicker">ADD A LINK</p>
+                <h2>添加网址文字</h2>
+              </div>
+              <span class="step-badge">01</span>
+            </div>
+
+            <form id="linkForm" novalidate>
+              <div class="field-group">
+                <label for="urlInput">网址 <span>*</span></label>
+                <input
+                  id="urlInput"
+                  name="url"
+                  type="url"
+                  inputmode="url"
+                  autocomplete="url"
+                  placeholder="https://example.com"
+                  required
+                />
+                <p class="field-hint">支持 http:// 和 https://；输入 example.com 也会自动补全。</p>
+              </div>
+
+              <div class="field-group">
+                <label for="titleInput">显示文字 <span>*</span></label>
+                <input
+                  id="titleInput"
+                  name="title"
+                  type="text"
+                  maxlength="80"
+                  placeholder="例如：我的学习资料"
+                  required
+                />
+              </div>
+
+              <div class="field-group">
+                <label for="noteInput">备注 <em>可选</em></label>
+                <textarea
+                  id="noteInput"
+                  name="note"
+                  rows="3"
+                  maxlength="160"
+                  placeholder="给这条网址加一句说明……"
+                ></textarea>
+              </div>
+
+              <div class="form-footer">
+                <label class="switch-line" for="defaultActive">
+                  <input id="defaultActive" type="checkbox" checked />
+                  <span class="switch" aria-hidden="true"><span></span></span>
+                  <span>添加后立即启用</span>
+                </label>
+                <button class="button button-primary" type="submit">
+                  <span aria-hidden="true">＋</span> 添加到列表
+                </button>
+              </div>
+              <p class="form-error" id="formError" role="alert"></p>
+            </form>
+
+            <div class="upload-box">
+              <div class="upload-icon" aria-hidden="true">↥</div>
+              <div>
+                <strong>批量导入网址文字</strong>
+                <p>上传 .txt、.csv 或 .json 文件，每行可写“显示文字 | 网址”。</p>
+              </div>
+              <label class="button button-ghost upload-button" for="fileInput">
+                选择文件
+                <input id="fileInput" type="file" accept=".txt,.csv,.json,text/plain,application/json" />
+              </label>
+            </div>
+          </div>
+
+          <div class="panel list-panel">
+            <div class="panel-heading list-heading">
+              <div>
+                <p class="section-kicker">LINK LIBRARY</p>
+                <h2>我的网址 <span class="count-pill" id="totalCount">0</span></h2>
+              </div>
+              <button class="icon-button" id="masterToggle" type="button" title="启用或停用全部网址" aria-label="启用或停用全部网址">
+                <span aria-hidden="true">◐</span>
+              </button>
+            </div>
+
+            <div class="toolbar">
+              <div class="filter-tabs" role="tablist" aria-label="筛选网址">
+                <button class="filter-tab is-active" data-filter="all" type="button" role="tab" aria-selected="true">全部</button>
+                <button class="filter-tab" data-filter="active" type="button" role="tab" aria-selected="false">已启用</button>
+                <button class="filter-tab" data-filter="inactive" type="button" role="tab" aria-selected="false">已停用</button>
+              </div>
+              <div class="toolbar-actions">
+                <button class="text-button" id="exportData" type="button">导出</button>
+                <button class="text-button danger-text" id="clearAll" type="button">清空</button>
+              </div>
+            </div>
+
+            <div class="link-list" id="linkList" aria-live="polite"></div>
+            <div class="empty-state" id="emptyState">
+              <div class="empty-illustration" aria-hidden="true">✦</div>
+              <h3>这里还没有网址</h3>
+              <p>从左侧添加一条，或者加载示例开始体验。</p>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <span>龙没有耳朵 · 静态版</span>
+        <span>数据只保存在本机浏览器</span>
+      </footer>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="app.js"></script>
+  </body>
+</html>
